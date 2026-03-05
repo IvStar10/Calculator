@@ -1,6 +1,40 @@
 from collections import namedtuple
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showerror
+
+
+def get_operands(operator_idx: int, expression: str) -> tuple[int, int]:
+    return int(expression[0:operator_idx]), int(expression[operator_idx:])
+
+
+def calculate_expression(expr: str) -> int:
+    # FIXME: Неправильная обработка ошибок.
+    for char in expr:
+        if not char.isnumeric():
+            try:
+                # Оператор
+                match char:
+                    case '+':
+                        op1, op2 = get_operands(expr.find('+'), expr)
+                        return op1 + op2
+                    case '-':
+                        op1, op2 = get_operands(expr.find('-'), expr)
+                        return op1 - op2
+                    case 'X':
+                        op1, op2 = get_operands(expr.find('X'), expr)
+                        return op1 * op2
+                    case ':':
+                        op1, op2 = get_operands(expr.find(':'), expr)
+                        return op1 / op2
+                    case _:
+                        showerror('Помилка',
+                            'Невідома операція')
+            except ValueError:
+                showerror('Помилка',
+                    'Цей калькулятор підтримує тільки одну оперецію.')
+    else:
+        return int(expr)  # Оператора нет, возвращаем исходное число.
 
 
 def handle_operation(button_text: str) -> None:
@@ -12,7 +46,8 @@ def handle_operation(button_text: str) -> None:
             key = keypress_event.keysym
 
         if button_text == '=' or key == 'Return':
-            ...
+            res = calculate_expression(enter_field.get())
+            print(res)
         elif button_text == 'C' or key == 'Delete':
             enter_field.delete(0, 'end')
         else:
