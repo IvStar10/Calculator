@@ -42,12 +42,14 @@ def handle_operation(button_text: str):
         else:
             key = keypress_event.keysym
 
+        expression = enter_field.get()
         if button_text == '=' or key == 'Return':
             try:
-                res = calculate_expression(enter_field.get())
+                res = calculate_expression(expression)
             except ZeroDivisionError:
                 showerror('Помилка',
                           'Ділення на 0!')
+                return
             except ValueError as e:
                 if str(e) == 'Invalid operation.':
                     showerror('Помилка',
@@ -62,6 +64,8 @@ def handle_operation(button_text: str):
                 return
             enter_field.delete(0, 'end')
             enter_field.insert(0, str(res))
+
+            history_text_field.insert('end', f'{expression} = {res}\n')
         elif button_text == 'C' or key == 'Delete':
             enter_field.delete(0, 'end')
         elif button_text in ('+', '-', 'X', ':') or key in ('KP_Multiply', 'KP_Divide', 'KP_Add', 'KP_Subtract'):
