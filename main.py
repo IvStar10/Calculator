@@ -1,5 +1,3 @@
-# TODO: Добавить историю вычислений.
-from collections import namedtuple
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showerror
@@ -81,25 +79,23 @@ def handle_number(button_text: str):
     return inner
 
 
-CalcButton = namedtuple('CalcButton',
-                        ['column', 'row', 'text', 'is_operation', 'key'])
 buttons = (
-    CalcButton(0, 3, '1', False, '<KP_1>'),
-    CalcButton(1, 3, '2', False, '<KP_2>'),
-    CalcButton(2, 3, '3', False, '<KP_3>'),
-    CalcButton(0, 2, '4', False, '<KP_4>'),
-    CalcButton(1, 2, '5', False, '<KP_5>'),
-    CalcButton(2, 2, '6', False, '<KP_6>'),
-    CalcButton(0, 1, '7', False, '<KP_7>'),
-    CalcButton(1, 1, '8', False, '<KP_8>'),
-    CalcButton(2, 1, '9', False, '<KP_9>'),
-    CalcButton(1, 4, '0', False, '<KP_0>'),
-    CalcButton(3, 1, 'X', True, '<KP_Multiply>'),
-    CalcButton(3, 2, ':', True, '<KP_Divide>'),
-    CalcButton(3, 3, '+', True, '<KP_Add>'),
-    CalcButton(3, 4, '-', True, '<KP_Subtract>'),
-    CalcButton(2, 4, '=', True, '<Return>'),
-    CalcButton(0, 4, 'C', True, '<Delete>')
+    (0, 3, '1', False, '<KP_1>'),
+    (1, 3, '2', False, '<KP_2>'),
+    (2, 3, '3', False, '<KP_3>'),
+    (0, 2, '4', False, '<KP_4>'),
+    (1, 2, '5', False, '<KP_5>'),
+    (2, 2, '6', False, '<KP_6>'),
+    (0, 1, '7', False, '<KP_7>'),
+    (1, 1, '8', False, '<KP_8>'),
+    (2, 1, '9', False, '<KP_9>'),
+    (1, 4, '0', False, '<KP_0>'),
+    (3, 1, 'X', True, '<KP_Multiply>'),
+    (3, 2, ':', True, '<KP_Divide>'),
+    (3, 3, '+', True, '<KP_Add>'),
+    (3, 4, '-', True, '<KP_Subtract>'),
+    (2, 4, '=', True, '<Return>'),
+    (0, 4, 'C', True, '<Delete>')
 )
 
 window = tk.Tk()
@@ -118,10 +114,10 @@ history_text_field.pack()
 enter_field.grid(row=0, column=0, columnspan=4)
 
 for button in buttons:
-    btn = ttk.Button(master=calc_frame, text=button.text,
-                     command=(handle_operation(button.text) if button.is_operation else handle_number(button.text)))
-    btn.grid(row=button.row, column=button.column)
-    window.bind(button.key,
-                (handle_operation(button.text) if button.is_operation else handle_number(button.text)))
+    btn = ttk.Button(master=calc_frame, text=button[2],
+                     command=(handle_operation(button[2]) if button[3] else handle_number(button[2])))
+    btn.grid(row=(button[1]), column=(button[0]))
+    window.bind(button[4],
+                (handle_operation(button[2]) if button[3] else handle_number(button[2])))
 
 window.mainloop()
